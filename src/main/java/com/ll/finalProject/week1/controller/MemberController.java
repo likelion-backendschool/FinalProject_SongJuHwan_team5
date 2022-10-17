@@ -16,8 +16,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
@@ -101,6 +103,19 @@ public class MemberController {
         }
 
         return "redirect:/member/logout";
+    }
+
+    @GetMapping("/findUsername")
+    public String findId(){
+        return "member/findUserName";
+    }
+
+    @PostMapping("/findUsername")
+    public String findId(@RequestParam String email, Model model){
+        System.out.println(email);
+        String result = memberService.findUserName(email);
+        model.addAttribute("result", result);
+        return "member/findUserNameResult";
     }
 
 

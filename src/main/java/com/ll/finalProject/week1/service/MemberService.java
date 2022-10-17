@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -40,5 +42,20 @@ public class MemberService {
         memberModifyDto.setNickName(member.getNickName());
 
         return memberModifyDto;
+    }
+
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+    }
+
+    public String findUserName(String email) {
+        List<Member> memberList = memberRepository.findAll();
+        for(Member member : memberList){
+            if(member.getEmail().equals(email)){
+                return member.getUserName();
+            }
+        }
+        String wrong = "해당 e-mail로 등록된 ID가 존재하지 않습니다.";
+        return wrong;
     }
 }

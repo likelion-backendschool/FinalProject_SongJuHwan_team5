@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Week 1 _ 로그인</title>
@@ -21,6 +21,7 @@
       <input type="password" name="password" id="password" class="form-control">
     </div>
     <button type="submit" class="btn btn-primary">로그인</button>
+    <a sec:authorize="isAnonymous()" th:href="@{/member/findUsername}">아이디찾기</a>
   </div>
 </form>
 </body>
