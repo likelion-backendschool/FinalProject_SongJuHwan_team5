@@ -33,13 +33,13 @@ public class MemberController {
 
     @PostMapping("/join")
     public String memberLogin(@Valid MemberDto memberDto, BindingResult bindingResult){
-        //회원가입 중복 검사
+        //회원가입 오류 검사
         if(bindingResult.hasErrors()){
             return "member/join";
         }
 
         if(!memberDto.getPassword().equals(memberDto.getPasswordConfirm())){
-            bindingResult.rejectValue("userPassWordConfirm", "passWordInCorrect",
+            bindingResult.rejectValue("passwordConfirm", "passWordInCorrect",
                     "비밀번호가 일치하지 않습니다.");
             return "member/join";
         }
@@ -58,7 +58,6 @@ public class MemberController {
 
         return "redirect:/";
     }
-
     @GetMapping("/login")
     public String login(){
         return "/member/login";
@@ -89,8 +88,8 @@ public class MemberController {
             return "member/modify";
         }
 
-        if(!memberDto.getPassword().equals(memberDto.getPassword())){
-            bindingResult.rejectValue("userPassWordConfirm", "passWordInCorrect",
+        if(!memberDto.getPassword().equals(memberDto.getPasswordConfirm())){
+            bindingResult.rejectValue("passwordConfirm", "passWordInCorrect",
                     "비밀번호가 일치하지 않습니다.");
             return "member/modify";
         }
