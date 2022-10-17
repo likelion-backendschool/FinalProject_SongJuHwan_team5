@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 1 _ 회원정보수정</title>
+</head>
+<body>
+<form th:action="@{/member/modify}" th:object="${memberDto}" method="post">
+    <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+        <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+    </div>
+    <div class="row">
+        <div class="col-6 mb-3">
+            <label class="form-label">사용자ID</label>
+            <input type="text" name="userName" th:field="*{userName}" class="form-control">
+        </div>
+        <div class="col-6 mb-3">
+            <label class="form-label">사용자 닉네임</label>
+            <input type="text" name="nickName" th:field="*{nickName}" class="form-control">
+        </div>
+        <div class="col-6 mb-3">
+            <label class="form-label">이메일</label>
+            <input type="email" name="eMail" th:field="*{eMail}" class="form-control">
+        </div>
+        <div class="col-12 mb-3">
+            <label class="form-label">비밀번호</label>
+            <input type="text" name="password" th:field="*{password}" class="form-control">
+        </div>
+        <div class="col-12 mb-3">
+            <label class="form-label">비밀번호 확인</label>
+            <input type="text" name="passwordConfirm" th:field="*{passwordConfirm}" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">회원 정보 수정</button>
+    </div>
+</body>
+</html>
