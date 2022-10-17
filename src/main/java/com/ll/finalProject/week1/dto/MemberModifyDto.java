@@ -1,5 +1,6 @@
 package com.ll.finalProject.week1.dto;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,21 +10,10 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class MemberDto {
-    @Size(min = 3 , max = 25, message = "ID의 최소길이는 3 글자, 최대길이는 25 글자 입니다.")
-    @NotEmpty(message = "ID는 필수사항입니다.")
-    private String userName;
+public class MemberModifyDto {
 
     @Size(min = 3 , max = 25, message = "닉네임의 최소길이는 3 글자, 최대길이는 25 글자 입니다.")
     private String nickName;
-
-    private String oldPassword;
-
-    @NotEmpty(message = "비밀번호는 필수사항입니다.")
-    private String password;
-
-    @NotEmpty(message = "비밀번호 확인은 필수사항입니다.")
-    private String passwordConfirm;
 
     @Email
     @NotEmpty(message = "이메일은 필수사항입니다.")

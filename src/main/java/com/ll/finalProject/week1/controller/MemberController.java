@@ -2,6 +2,7 @@ package com.ll.finalProject.week1.controller;
 
 import com.ll.finalProject.week1.domain.Member;
 import com.ll.finalProject.week1.dto.MemberDto;
+import com.ll.finalProject.week1.dto.MemberModifyDto;
 import com.ll.finalProject.week1.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -65,20 +66,19 @@ public class MemberController {
 
     @GetMapping("/modify")
     @PreAuthorize("isAuthenticated()")
-    public String memberUpdate(Model model, MemberDto memberDto){
+    public String memberUpdate(Model model, MemberModifyDto memberModifyDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Member member = memberService.findByUserName(user.getUsername());
-        MemberDto newMemberDto = memberService.saveNewMemberDto(member, memberDto);
-        model.addAttribute("memberDto", memberDto);
-        model.addAttribute("member", newMemberDto);
+        MemberModifyDto newMemberModifyDto = memberService.saveNewMemberDto(member, memberModifyDto);
+        model.addAttribute("memberModifyDto", memberModifyDto);
 
         return "/member/modify";
     }
 
     @PostMapping("/modify")
     @PreAuthorize("isAuthenticated()")
-    public String memberUpdate(@Valid MemberDto memberDto, BindingResult bindingResult){
+    public String memberUpdate(@Valid MemberModifyDto memberModifyDto, BindingResult bindingResult){
         //현재 로그인 된 사용자
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
@@ -88,13 +88,8 @@ public class MemberController {
             return "member/modify";
         }
 
-        if(!memberDto.getPassword().equals(memberDto.getPasswordConfirm())){
-            bindingResult.rejectValue("passwordConfirm", "passWordInCorrect",
-                    "비밀번호가 일치하지 않습니다.");
-            return "member/modify";
-        }
         try{
-            memberService.update(memberDto, member);
+            memberService.update(memberModifyDto, member);
         } catch(DataIntegrityViolationException e){
             e.printStackTrace();
             bindingResult.reject("joinFailed", "이미 등록된 사용자입니다.");

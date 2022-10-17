@@ -2,6 +2,7 @@ package com.ll.finalProject.week1.service;
 
 import com.ll.finalProject.week1.domain.Member;
 import com.ll.finalProject.week1.dto.MemberDto;
+import com.ll.finalProject.week1.dto.MemberModifyDto;
 import com.ll.finalProject.week1.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,16 +20,14 @@ public class MemberService {
         member.setUserName(memberDto.getUserName());
         member.setNickName(memberDto.getNickName());
         member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
-        member.setEMail(memberDto.getEMail());
+        member.setEmail(memberDto.getEmail());
         member.setAuthLevel(3);
         memberRepository.save(member);
     }
 
-    public void update(MemberDto memberDto, Member member) {
-        member.setUserName(memberDto.getUserName());
-        member.setNickName(memberDto.getNickName());
-        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
-        member.setEMail(memberDto.getEMail());
+    public void update(MemberModifyDto memberModifyDto, Member member) {
+        member.setNickName(memberModifyDto.getNickName());
+        member.setEmail(memberModifyDto.getEmail());
         memberRepository.save(member);
     }
 
@@ -36,13 +35,10 @@ public class MemberService {
         return memberRepository.findByUserName(username).orElseThrow(null);
     }
 
-    public MemberDto saveNewMemberDto(Member member, MemberDto memberDto) {
-        memberDto.setUserName(member.getUserName());
-        memberDto.setEMail(member.getEMail());
-        memberDto.setNickName(member.getNickName());
-        memberDto.setPassword(member.getPassword());
-        memberDto.setPasswordConfirm(member.getPassword());
+    public MemberModifyDto saveNewMemberDto(Member member, MemberModifyDto memberModifyDto) {
+        memberModifyDto.setEmail(member.getEmail());
+        memberModifyDto.setNickName(member.getNickName());
 
-        return memberDto;
+        return memberModifyDto;
     }
 }
