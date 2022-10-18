@@ -3,6 +3,7 @@ package com.ll.finalProject.week1.controller;
 import com.ll.finalProject.week1.domain.Member;
 import com.ll.finalProject.week1.dto.MemberDto;
 import com.ll.finalProject.week1.dto.MemberModifyDto;
+import com.ll.finalProject.week1.service.MailService;
 import com.ll.finalProject.week1.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,6 +29,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MailService mailService;
 
     @GetMapping("/join")
     public String memberLogin(MemberDto memberDto){
@@ -49,6 +51,7 @@ public class MemberController {
 
         try{
             memberService.create(memberDto);
+            mailService.sendWelcomeMail(memberDto);
         } catch(DataIntegrityViolationException e){
             e.printStackTrace();
             bindingResult.reject("joinFailed", "이미 등록된 사용자입니다.");
