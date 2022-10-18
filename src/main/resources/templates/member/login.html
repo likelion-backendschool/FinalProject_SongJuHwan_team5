@@ -22,6 +22,8 @@
     </div>
     <button type="submit" class="btn btn-primary">로그인</button>
     <a sec:authorize="isAnonymous()" th:href="@{/member/findUsername}">아이디찾기</a>
+    <a sec:authorize="isAnonymous()" th:href="@{/member/findPassword}">비밀번호 찾기</a>
+
   </div>
 </form>
 </body>

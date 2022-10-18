@@ -3,6 +3,7 @@ package com.ll.finalProject.week1.controller;
 import com.ll.finalProject.week1.domain.Member;
 import com.ll.finalProject.week1.dto.MemberDto;
 import com.ll.finalProject.week1.dto.MemberModifyDto;
+import com.ll.finalProject.week1.dto.MemberModifyPasswordDto;
 import com.ll.finalProject.week1.service.MailService;
 import com.ll.finalProject.week1.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,21 +32,22 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MailService mailService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/join")
-    public String memberLogin(MemberDto memberDto){
+    public String loginMember(MemberDto memberDto){
         return "member/join";
     }
 
     @PostMapping("/join")
-    public String memberLogin(@Valid MemberDto memberDto, BindingResult bindingResult){
+    public String loginMember(@Valid MemberDto memberDto, BindingResult bindingResult){
         //회원가입 오류 검사
         if(bindingResult.hasErrors()){
             return "member/join";
         }
 
         if(!memberDto.getPassword().equals(memberDto.getPasswordConfirm())){
-            bindingResult.rejectValue("passwordConfirm", "passWordInCorrect",
+            bindingResult.rejectValue("passwordConfirm", "passwordInCorrect",
                     "비밀번호가 일치하지 않습니다.");
             return "member/join";
         }
@@ -71,7 +74,7 @@ public class MemberController {
 
     @GetMapping("/modify")
     @PreAuthorize("isAuthenticated()")
-    public String memberUpdate(Model model, MemberModifyDto memberModifyDto){
+    public String modifyMember(Model model, MemberModifyDto memberModifyDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Member member = memberService.findByUserName(user.getUsername());
@@ -83,7 +86,7 @@ public class MemberController {
 
     @PostMapping("/modify")
     @PreAuthorize("isAuthenticated()")
-    public String memberUpdate(@Valid MemberModifyDto memberModifyDto, BindingResult bindingResult){
+    public String modifyMember(@Valid MemberModifyDto memberModifyDto, BindingResult bindingResult){
         //현재 로그인 된 사용자
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
@@ -108,6 +111,40 @@ public class MemberController {
         return "redirect:/member/logout";
     }
 
+    @GetMapping("/modifyPassword")
+    @PreAuthorize("isAuthenticated()")
+    public String modifyPassword(MemberModifyPasswordDto memberModifyPasswordDto){
+        return "member/modifyPassword";
+    }
+
+    @PostMapping("/modifyPassword")
+    @PreAuthorize("isAuthenticated()")
+    public String modifyPassword(@Valid MemberModifyPasswordDto memberModifyPasswordDto, BindingResult bindingResult){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Member member = memberService.findByUserName(user.getUsername());
+        if(!passwordEncoder.matches(memberModifyPasswordDto.getOldPassword(), member.getPassword())){
+            bindingResult.rejectValue("oldPassword", "passwordIncorrect",
+                    "원래 비밀번호가 아닙니다.");
+            return "member/modifyPassword";
+        }
+        if(memberModifyPasswordDto.getOldPassword().equals(memberModifyPasswordDto.getPassword())){
+            bindingResult.rejectValue("password", "samePassword",
+                    "원래 비밀번호와 동일한 비밀번호 입니다.");
+            return "member/modifyPassword";
+        }
+
+        if(!memberModifyPasswordDto.getPassword().equals(memberModifyPasswordDto.getPasswordConfirm())){
+            bindingResult.rejectValue("passwordConfirm", "passWordInCorrect",
+                    "비밀번호가 일치하지 않습니다.");
+            return "member/modifyPassword";
+        }
+
+        memberService.modifyPassword(member, memberModifyPasswordDto.getPassword());
+
+        return "redirect:/member/logout";
+    }
+
     @GetMapping("/findUsername")
     public String findId(){
         return "member/findUserName";
@@ -115,11 +152,21 @@ public class MemberController {
 
     @PostMapping("/findUsername")
     public String findId(@RequestParam String email, Model model){
-        System.out.println(email);
         String result = memberService.findUserName(email);
         model.addAttribute("result", result);
         return "member/findUserNameResult";
     }
 
+    @GetMapping("/findPassword")
+    public String findPassword(){
+        return "member/findPassword";
+    }
+
+    @PostMapping("/findPassword")
+    public String findPassword(@RequestParam String userName, @RequestParam String email, Model model){
+        String result = memberService.findPassword(userName, email);
+        model.addAttribute("result", result);
+        return "member/findPasswordResult";
+    }
 
 }

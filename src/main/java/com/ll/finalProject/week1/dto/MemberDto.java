@@ -17,8 +17,6 @@ public class MemberDto {
     @Size(min = 3 , max = 25, message = "닉네임의 최소길이는 3 글자, 최대길이는 25 글자 입니다.")
     private String nickName;
 
-    private String oldPassword;
-
     @NotEmpty(message = "비밀번호는 필수사항입니다.")
     private String password;
 
