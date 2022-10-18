@@ -1,7 +1,6 @@
 package com.ll.finalProject.week1.domain;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )

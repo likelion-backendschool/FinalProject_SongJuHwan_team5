@@ -1,8 +1,8 @@
 package com.ll.finalProject.week1.service;
 
 import com.ll.finalProject.week1.domain.Member;
-import com.ll.finalProject.week1.dto.MemberDto;
-import com.ll.finalProject.week1.dto.MemberModifyDto;
+import com.ll.finalProject.week1.dto.Member.MemberDto;
+import com.ll.finalProject.week1.dto.Member.MemberModifyDto;
 import com.ll.finalProject.week1.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

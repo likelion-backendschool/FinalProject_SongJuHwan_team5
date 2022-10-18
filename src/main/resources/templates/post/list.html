@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 1 _ 글 리스트</title>
+</head>
+<body>
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성날짜</th>
+                <th>수정날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+                <div id="postList" th:each="post : ${postList}">
+                    <tr>
+                        <td th:text="${post.id}"></td>
+                        <td th:text="${post.subject}"></td>
+                        <td th:text="${post.getMember().userName}"></td>
+                        <td th:text="${#strings.substring(post.createDate, 0, 10)}"></td>
+                        <td th:text="${#strings.substring(post.updateDate, 0, 10)}"></td>
+                    </tr>
+                </div>
+            </tbody>
+        </table>
+        <a th:href="@{/post/write}">글 쓰기</a>
+    </div>
+</body>
+</html>

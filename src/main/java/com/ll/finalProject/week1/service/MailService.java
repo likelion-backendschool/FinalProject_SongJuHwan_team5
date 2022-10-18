@@ -1,7 +1,6 @@
 package com.ll.finalProject.week1.service;
 
-import com.ll.finalProject.week1.domain.Member;
-import com.ll.finalProject.week1.dto.MemberDto;
+import com.ll.finalProject.week1.dto.Member.MemberDto;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

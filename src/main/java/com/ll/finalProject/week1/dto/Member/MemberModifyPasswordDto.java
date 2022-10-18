@@ -1,4 +1,4 @@
-package com.ll.finalProject.week1.dto;
+package com.ll.finalProject.week1.dto.Member;
 
 import lombok.Getter;
 import lombok.Setter;

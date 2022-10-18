@@ -1,9 +1,9 @@
 package com.ll.finalProject.week1.controller;
 
 import com.ll.finalProject.week1.domain.Member;
-import com.ll.finalProject.week1.dto.MemberDto;
-import com.ll.finalProject.week1.dto.MemberModifyDto;
-import com.ll.finalProject.week1.dto.MemberModifyPasswordDto;
+import com.ll.finalProject.week1.dto.Member.MemberDto;
+import com.ll.finalProject.week1.dto.Member.MemberModifyDto;
+import com.ll.finalProject.week1.dto.Member.MemberModifyPasswordDto;
 import com.ll.finalProject.week1.service.MailService;
 import com.ll.finalProject.week1.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.List;
 
 
 @Controller
