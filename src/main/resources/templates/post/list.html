@@ -20,10 +20,13 @@
                 <div id="postList" th:each="post : ${postList}">
                     <tr>
                         <td th:text="${post.id}"></td>
-                        <td th:text="${post.subject}"></td>
+                        <td>
+                            <a th:href="@{/post/{postId} (postId = ${post.id})}"
+                               th:text="${post.subject}"></a>
+                        </td>
                         <td th:text="${post.getMember().userName}"></td>
-                        <td th:text="${#strings.substring(post.createDate, 0, 10)}"></td>
-                        <td th:text="${#strings.substring(post.updateDate, 0, 10)}"></td>
+                        <td th:text="${#strings.substring(post.createDate, 0, 16)}"></td>
+                        <td th:text="${#strings.substring(post.updateDate, 0, 16)}"></td>
                     </tr>
                 </div>
             </tbody>

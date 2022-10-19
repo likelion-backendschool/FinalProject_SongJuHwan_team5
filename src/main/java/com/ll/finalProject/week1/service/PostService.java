@@ -32,8 +32,29 @@ public class PostService {
         post.setMember(member);
         post.setSubject(postDto.getSubject());
         post.setContent(postDto.getContent());
-        post.setContentHTML(postDto.getContentHtml());
+        post.setContentHTML(postDto.getContentHTML());
 
+        postRepository.save(post);
+    }
+
+    public Post findById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(null);
+    }
+
+    public void delete(Post post) {
+        postRepository.delete(post);
+    }
+
+    public void saveNewPostDto(Post post, PostDto postDto) {
+        postDto.setSubject(post.getSubject());
+        postDto.setContent(post.getContent());
+        postDto.setContentHTML(post.getContentHTML());
+    }
+
+    public void modify(Post post , PostDto postDto) {
+        post.setSubject(postDto.getSubject());
+        post.setContent(postDto.getContent());
+        post.setContentHTML(postDto.getContentHTML());
         postRepository.save(post);
     }
 }

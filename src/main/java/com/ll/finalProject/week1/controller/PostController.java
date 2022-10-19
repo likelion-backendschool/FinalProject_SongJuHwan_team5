@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -46,6 +47,47 @@ public class PostController {
             bindingResult.reject("writeFailed", e.getMessage());
             return "post/write";
         }
-        return "redirect:post/list";
+        return "redirect:/post/list";
     }
+
+    @GetMapping("/{postId}")
+    public String postDetail(@PathVariable Long postId, Model model){
+        Post post = postService.findById(postId);
+        model.addAttribute("post", post);
+        return "post/detail";
+    }
+
+    @GetMapping("/{postId}/delete")
+    public String deletePost(@PathVariable Long postId){
+        Post post = postService.findById(postId);
+        postService.delete(post);
+        return "redirect:/post/list";
+    }
+
+    @GetMapping("/{postId}/modify")
+    public String modifyPost(@PathVariable Long postId, PostDto postDto, Model model){
+        Post post = postService.findById(postId);
+        postService.saveNewPostDto(post, postDto);
+        model.addAttribute("postId", postId);
+        model.addAttribute("postDto", postDto);
+        return "post/modify";
+    }
+
+    @PostMapping("/{postId}/modify")
+    public String modifyPost(@PathVariable Long postId, @Valid PostDto postDto, BindingResult bindingResult){
+        Post post = postService.findById(postId);
+        if(bindingResult.hasErrors()){
+            return "post/modify";
+        }
+        try{
+            postService.modify(post, postDto);
+        } catch(Exception e){
+            e.printStackTrace();
+            bindingResult.reject("modifyFailed", e.getMessage());
+            return "post/modify";
+        }
+        return "redirect:/post/%d".formatted(postId);
+
+    }
+
 }

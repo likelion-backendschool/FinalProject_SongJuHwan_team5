@@ -13,7 +13,7 @@ public class PostDto {
 
     private String content;
 
-    private String contentHtml;
+    private String contentHTML;
 
     private String keywords;
 }

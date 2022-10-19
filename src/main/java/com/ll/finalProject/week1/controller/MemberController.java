@@ -77,7 +77,7 @@ public class MemberController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Member member = memberService.findByUserName(user.getUsername());
-        MemberModifyDto newMemberModifyDto = memberService.saveNewMemberDto(member, memberModifyDto);
+        memberService.saveNewMemberDto(member, memberModifyDto);
         model.addAttribute("memberModifyDto", memberModifyDto);
 
         return "/member/modify";
