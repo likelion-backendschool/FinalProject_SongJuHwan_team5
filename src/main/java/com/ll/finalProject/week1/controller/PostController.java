@@ -1,17 +1,20 @@
 package com.ll.finalProject.week1.controller;
 
 import com.ll.finalProject.week1.domain.Post;
+import com.ll.finalProject.week1.domain.PostHashTag;
+import com.ll.finalProject.week1.domain.PostKeyword;
 import com.ll.finalProject.week1.dto.PostDto;
+import com.ll.finalProject.week1.repository.HashTagRepository;
+import com.ll.finalProject.week1.repository.KeywordRepository;
+import com.ll.finalProject.week1.service.HashTagService;
+import com.ll.finalProject.week1.service.KeywordService;
 import com.ll.finalProject.week1.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,6 +25,8 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final KeywordService keywordService;
+    private final HashTagService hashTagService;
 
     @GetMapping("/list")
     public String postList(Model model){
@@ -36,12 +41,12 @@ public class PostController {
     }
 
     @PostMapping("/write")
-    public String writePost(@Valid PostDto postDto, BindingResult bindingResult){
+    public String writePost(@Valid PostDto postDto, BindingResult bindingResult, @RequestParam String keyword){
         if(bindingResult.hasErrors()){
             return "post/write";
         }
         try{
-            postService.write(postDto);
+            postService.write(postDto, keyword);
         } catch(Exception e){
             e.printStackTrace();
             bindingResult.reject("writeFailed", e.getMessage());
@@ -60,7 +65,9 @@ public class PostController {
     @GetMapping("/{postId}/delete")
     public String deletePost(@PathVariable Long postId){
         Post post = postService.findById(postId);
-        postService.delete(post);
+        PostHashTag postHashTag = hashTagService.findByPostId(postId);
+        PostKeyword postKeyword = keywordService.findById(postHashTag.getPostKeyword().getId());
+        postService.delete(post, postKeyword, postHashTag);
         return "redirect:/post/list";
     }
 
@@ -74,13 +81,15 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/modify")
-    public String modifyPost(@PathVariable Long postId, @Valid PostDto postDto, BindingResult bindingResult){
+    public String modifyPost(@PathVariable Long postId, @Valid PostDto postDto, BindingResult bindingResult, @RequestParam String keyword){
         Post post = postService.findById(postId);
+        PostHashTag postHashTag = hashTagService.findByPostId(postId);
+        PostKeyword postKeyword = keywordService.findById(postHashTag.getPostKeyword().getId());
         if(bindingResult.hasErrors()){
             return "post/modify";
         }
         try{
-            postService.modify(post, postDto);
+            postService.modify(post, postKeyword, postHashTag, postDto, keyword);
         } catch(Exception e){
             e.printStackTrace();
             bindingResult.reject("modifyFailed", e.getMessage());

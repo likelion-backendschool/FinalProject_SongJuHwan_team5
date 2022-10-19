@@ -1,5 +1,6 @@
 package com.ll.finalProject.week1.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,23 +13,11 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Post extends BaseEntity{
-
+public class PostKeyword extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_UUID")
-    private Member member;
-
-    @Column(name = "POST_SUBJECT")
-    private String subject;
-
-    @Column(name = "POST_CONTENT")
-    private String content;
-
-    @Column(name = "POST_CONTENT_HTML")
-    private String contentHTML;
-
+    @Column(name = "HASHTAG")
+    private String keyword;
 }

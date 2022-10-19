@@ -2,7 +2,11 @@ package com.ll.finalProject.week1.service;
 
 import com.ll.finalProject.week1.domain.Member;
 import com.ll.finalProject.week1.domain.Post;
+import com.ll.finalProject.week1.domain.PostHashTag;
+import com.ll.finalProject.week1.domain.PostKeyword;
 import com.ll.finalProject.week1.dto.PostDto;
+import com.ll.finalProject.week1.repository.HashTagRepository;
+import com.ll.finalProject.week1.repository.KeywordRepository;
 import com.ll.finalProject.week1.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -18,30 +22,44 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final MemberService memberService;
+    private final KeywordRepository keywordRepository;
+    private final HashTagRepository hashTagRepository;
 
     public List<Post> findAll() {
         return postRepository.findAll();
     }
 
-    public void write(PostDto postDto) {
+    public void write(PostDto postDto, String keyword) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Member member = memberService.findByUserName(user.getUsername());
+
 
         Post post = new Post();
         post.setMember(member);
         post.setSubject(postDto.getSubject());
         post.setContent(postDto.getContent());
         post.setContentHTML(postDto.getContentHTML());
-
         postRepository.save(post);
+
+        PostKeyword postKeyword = new PostKeyword();
+        postKeyword.setKeyword(keyword);
+        keywordRepository.save(postKeyword);
+
+        PostHashTag postHashTag = new PostHashTag();
+        postHashTag.setPost(post);
+        postHashTag.setPostKeyword(postKeyword);
+        hashTagRepository.save(postHashTag);
+
     }
 
     public Post findById(Long postId) {
         return postRepository.findById(postId).orElseThrow(null);
     }
 
-    public void delete(Post post) {
+    public void delete(Post post, PostKeyword postKeyword, PostHashTag postHashTag) {
+        hashTagRepository.delete(postHashTag);
+        keywordRepository.delete(postKeyword);
         postRepository.delete(post);
     }
 
@@ -51,10 +69,17 @@ public class PostService {
         postDto.setContentHTML(post.getContentHTML());
     }
 
-    public void modify(Post post , PostDto postDto) {
+    public void modify(Post post, PostKeyword postKeyword, PostHashTag postHashTag,PostDto postDto, String keyword) {
         post.setSubject(postDto.getSubject());
         post.setContent(postDto.getContent());
         post.setContentHTML(postDto.getContentHTML());
         postRepository.save(post);
+
+        postKeyword.setKeyword(keyword);
+        keywordRepository.save(postKeyword);
+
+        postHashTag.setPost(post);
+        postHashTag.setPostKeyword(postKeyword);
+        hashTagRepository.save(postHashTag);
     }
 }
