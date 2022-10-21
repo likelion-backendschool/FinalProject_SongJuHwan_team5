@@ -10,7 +10,7 @@
                 <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
             </div>
             <div class="row">
-                <div class="col-6 mb-3">
+                <div class="col-6 mb-3" th:if="${member.type == '작가 회원'}">
                     <label class="form-label">사용자 닉네임</label>
                     <input type="text" name="nickName" th:field="*{nickName}" class="form-control">
                 </div>

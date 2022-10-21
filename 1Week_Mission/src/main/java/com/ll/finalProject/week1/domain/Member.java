@@ -21,8 +21,11 @@ public class Member extends BaseEntity {
     @Column( name = "USER_PASSWORD")
     private String password;
 
-    @Column(unique = true, name = "USER_NICKNAME")
+    @Column( name = "USER_NICKNAME")
     private String nickName;
+
+    @Column( name = "USER_TYPE")
+    private String type;
 
     @Column(unique = true, name = "USER_EMAIL")
     private String email;

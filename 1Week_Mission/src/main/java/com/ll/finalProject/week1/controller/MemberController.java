@@ -71,6 +71,16 @@ public class MemberController {
         return "/member/login";
     }
 
+    @GetMapping("/myPage")
+    @PreAuthorize("isAuthenticated()")
+    public String myPage(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Member member = memberService.findByUserName(user.getUsername());
+        model.addAttribute("member" , member);
+        return "/member/myPage";
+    }
+
     @GetMapping("/modify")
     @PreAuthorize("isAuthenticated()")
     public String modifyMember(Model model, MemberModifyDto memberModifyDto){
@@ -78,6 +88,7 @@ public class MemberController {
         User user = (User) authentication.getPrincipal();
         Member member = memberService.findByUserName(user.getUsername());
         memberService.saveNewMemberDto(member, memberModifyDto);
+        model.addAttribute("member", member);
         model.addAttribute("memberModifyDto", memberModifyDto);
 
         return "/member/modify";
@@ -108,6 +119,22 @@ public class MemberController {
         }
 
         return "redirect:/member/logout";
+    }
+
+    @GetMapping("/register")
+    @PreAuthorize("isAuthenticated()")
+    public String register(){
+        return "member/register";
+    }
+
+    @PostMapping("/register")
+    @PreAuthorize("isAuthenticated()")
+    public String register(@RequestParam String nickName){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Member member = memberService.findByUserName(user.getUsername());
+        memberService.register(member, nickName);
+        return "redirect:/member/myPage";
     }
 
     @GetMapping("/modifyPassword")
