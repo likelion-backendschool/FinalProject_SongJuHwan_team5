@@ -31,6 +31,8 @@ public class PostController {
     @GetMapping("/list")
     public String postList(Model model){
        List<Post> postList = postService.findAll();
+       List<PostHashTag> postHashTagList = hashTagService.findAll();
+       model.addAttribute("hashTagList", postHashTagList);
        model.addAttribute("postList", postList);
        return "post/list";
     }
@@ -58,7 +60,9 @@ public class PostController {
     @GetMapping("/{postId}")
     public String postDetail(@PathVariable Long postId, Model model){
         Post post = postService.findById(postId);
+        PostHashTag postHashTag = hashTagService.findByPostId(postId);
         model.addAttribute("post", post);
+        model.addAttribute("hashTag", postHashTag);
         return "post/detail";
     }
 
