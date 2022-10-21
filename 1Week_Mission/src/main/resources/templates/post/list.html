@@ -11,22 +11,24 @@
             <tr>
                 <th>번호</th>
                 <th>제목</th>
+                <th>해시태그</th>
                 <th>작성자</th>
                 <th>작성날짜</th>
                 <th>수정날짜</th>
             </tr>
             </thead>
             <tbody>
-                <div id="postList" th:each="post : ${postList}">
+                <div id="postList" th:each="hashTag : ${hashTagList}">
                     <tr>
-                        <td th:text="${post.id}"></td>
+                        <td th:text="${hashTag.getPost().id}"></td>
                         <td>
-                            <a th:href="@{/post/{postId} (postId = ${post.id})}"
-                               th:text="${post.subject}"></a>
+                            <a th:href="@{/post/{postId} (postId = ${hashTag.getPost().id})}"
+                               th:text="${hashTag.getPost().subject}"></a>
                         </td>
-                        <td th:text="${post.getMember().userName}"></td>
-                        <td th:text="${#strings.substring(post.createDate, 0, 16)}"></td>
-                        <td th:text="${#strings.substring(post.updateDate, 0, 16)}"></td>
+                        <td th:text="${hashTag.getPostKeyword().keyword}"></td>
+                        <td th:text="${hashTag.getPost().getMember().userName}"></td>
+                        <td th:text="${#strings.substring(hashTag.createDate, 0, 16)}"></td>
+                        <td th:text="${#strings.substring(hashTag.updateDate, 0, 16)}"></td>
                     </tr>
                 </div>
             </tbody>

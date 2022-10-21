@@ -33,7 +33,8 @@ public class PostService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Member member = memberService.findByUserName(user.getUsername());
-
+        String[] value = keyword.split(",");
+        StringBuilder sb = new StringBuilder();
 
         Post post = new Post();
         post.setMember(member);
@@ -43,7 +44,17 @@ public class PostService {
         postRepository.save(post);
 
         PostKeyword postKeyword = new PostKeyword();
-        postKeyword.setKeyword(keyword);
+        for(int i = 0 ; i < value.length; i++){
+            if(i == value.length-1){
+                sb.append("#");
+                sb.append(value[i].split("\"")[3]);
+            } else {
+                sb.append("#");
+                sb.append(value[i].split("\"")[3]);
+                sb.append(", ");
+            }
+        }
+        postKeyword.setKeyword(sb.toString());
         keywordRepository.save(postKeyword);
 
         PostHashTag postHashTag = new PostHashTag();

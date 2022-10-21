@@ -10,7 +10,7 @@
     <a sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a>
     <a sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
 <div>
-    <a sec:authorize="isAuthenticated()" th:href="@{/member/modify}">회원정보 수정</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/member/myPage}">마이페이지</a>
 </div>
 <div>
     <a th:href="@{/post/list}">글 목록</a>

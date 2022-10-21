@@ -22,8 +22,8 @@ public class MemberService {
     public void create(MemberDto memberDto) {
         Member member = new Member();
         member.setUserName(memberDto.getUserName());
-        member.setNickName(memberDto.getNickName());
         member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+        member.setType("일반 회원");
         member.setEmail(memberDto.getEmail());
         member.setAuthLevel(3);
         memberRepository.save(member);
@@ -86,5 +86,11 @@ public class MemberService {
             }
         }
         return "입력하신 정보와 일치하는 계정이 없습니다.";
+    }
+
+    public void register(Member member, String nickName) {
+        member.setNickName(nickName);
+        member.setType("작가 회원");
+        memberRepository.save(member);
     }
 }

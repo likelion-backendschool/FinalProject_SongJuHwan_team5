@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class HashTagService {
@@ -14,5 +16,9 @@ public class HashTagService {
 
     public PostHashTag findByPostId(Long postId) {
        return hashTagRepository.findByPostId(postId).orElseThrow(null);
+    }
+
+    public List<PostHashTag> findAll() {
+        return hashTagRepository.findAll();
     }
 }
