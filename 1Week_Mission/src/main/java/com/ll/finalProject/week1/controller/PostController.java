@@ -1,5 +1,6 @@
 package com.ll.finalProject.week1.controller;
 
+import com.ll.finalProject.week1.domain.Member;
 import com.ll.finalProject.week1.domain.Post;
 import com.ll.finalProject.week1.domain.PostHashTag;
 import com.ll.finalProject.week1.domain.PostKeyword;
@@ -8,9 +9,13 @@ import com.ll.finalProject.week1.repository.HashTagRepository;
 import com.ll.finalProject.week1.repository.KeywordRepository;
 import com.ll.finalProject.week1.service.HashTagService;
 import com.ll.finalProject.week1.service.KeywordService;
+import com.ll.finalProject.week1.service.MemberService;
 import com.ll.finalProject.week1.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +32,7 @@ public class PostController {
     private final PostService postService;
     private final KeywordService keywordService;
     private final HashTagService hashTagService;
+    private final MemberService memberService;
 
     @GetMapping("/list")
     public String postList(Model model){
@@ -59,8 +65,12 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public String postDetail(@PathVariable Long postId, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Member member = memberService.findByUserName(user.getUsername());
         Post post = postService.findById(postId);
         PostHashTag postHashTag = hashTagService.findByPostId(postId);
+        model.addAttribute("member", member);
         model.addAttribute("post", post);
         model.addAttribute("hashTag", postHashTag);
         return "post/detail";
