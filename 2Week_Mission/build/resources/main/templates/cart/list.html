@@ -23,6 +23,9 @@
                     <td th:text="${cartItem.getProduct().price}"></td>
                     <td th:text="${cartItem.getMember().userName}"></td>
                     <td th:text="${#strings.substring(cartItem.createDate, 0, 16)}"></td>
+                    <td>
+                        <a th:href="@{/cart/remove/{productId} (productId = ${cartItem.getProduct().id})}">장바구니에서 삭제</a>
+                    </td>
                 </tr>
             </div>
         </div>

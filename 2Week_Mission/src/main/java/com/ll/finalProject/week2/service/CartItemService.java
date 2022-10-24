@@ -26,4 +26,13 @@ public class CartItemService {
         cartItem.setProduct(product);
         cartItemRepository.save(cartItem);
     }
+
+    public void delete(Member member, Product product) {
+        CartItem cartItem = findByMemberAndProduct(member,product);
+        cartItemRepository.delete(cartItem);
+    }
+
+    public CartItem findByMemberAndProduct(Member member, Product product) {
+        return cartItemRepository.findByMemberAndProduct(member, product);
+    }
 }
