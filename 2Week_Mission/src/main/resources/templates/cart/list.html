@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 2 _ 장바구니</title>
+</head>
+<body>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>상품명</th>
+            <th>가격</th>
+            <th>작성자</th>
+            <th>담은 날짜</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div id="postList" th:each="cartItem : ${cartItemList}">
+            <tr>
+                <td th:text="${cartItem.id}"></td>
+                <td th:text="${cartItem.getProduct().subject}"></td>
+                <td th:text="${cartItem.getProduct().price}"></td>
+                <td th:text="${cartItem.getMember().userName}"></td>
+                <td th:text="${#strings.substring(cartItem.createDate, 0, 16)}"></td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

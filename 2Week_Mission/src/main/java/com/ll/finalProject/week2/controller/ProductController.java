@@ -23,4 +23,5 @@ public class ProductController {
         model.addAttribute("productList", productList);
         return "product/list";
     }
+
 }
