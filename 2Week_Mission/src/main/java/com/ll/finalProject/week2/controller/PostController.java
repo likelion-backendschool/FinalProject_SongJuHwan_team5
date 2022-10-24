@@ -10,6 +10,7 @@ import com.ll.finalProject.week2.service.KeywordService;
 import com.ll.finalProject.week2.service.MemberService;
 import com.ll.finalProject.week2.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -41,11 +42,13 @@ public class PostController {
     }
 
     @GetMapping("/write")
+    @PreAuthorize("isAuthenticated()")
     public String writePost(PostDto postDto){
         return "post/write";
     }
 
     @PostMapping("/write")
+    @PreAuthorize("isAuthenticated()")
     public String writePost(@Valid PostDto postDto, BindingResult bindingResult, @RequestParam String keyword){
         if(bindingResult.hasErrors()){
             return "post/write";
@@ -61,6 +64,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
+    @PreAuthorize("isAuthenticated()")
     public String postDetail(@PathVariable Long postId, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
@@ -74,6 +78,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}/delete")
+    @PreAuthorize("isAuthenticated()")
     public String deletePost(@PathVariable Long postId){
         Post post = postService.findById(postId);
         PostHashTag postHashTag = hashTagService.findByPostId(postId);
@@ -83,6 +88,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}/modify")
+    @PreAuthorize("isAuthenticated()")
     public String modifyPost(@PathVariable Long postId, PostDto postDto, Model model){
         Post post = postService.findById(postId);
         postService.saveNewPostDto(post, postDto);
@@ -92,6 +98,7 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/modify")
+    @PreAuthorize("isAuthenticated()")
     public String modifyPost(@PathVariable Long postId, @Valid PostDto postDto, BindingResult bindingResult, @RequestParam String keyword){
         Post post = postService.findById(postId);
         PostHashTag postHashTag = hashTagService.findByPostId(postId);

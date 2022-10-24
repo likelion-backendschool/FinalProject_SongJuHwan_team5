@@ -93,4 +93,8 @@ public class MemberService {
         member.setType("작가 회원");
         memberRepository.save(member);
     }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(null);
+    }
 }
