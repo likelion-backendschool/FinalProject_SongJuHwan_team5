@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+</head>
+<body>
+    <div class="container">
+        <h2>게시글 상세 화면</h2>
+        <input type="hidden" class="content" th:value="${post.content}">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th scope="row">번호</th>
+                <td th:text="${post.id}"></td>
+                <th scope="row">작성자</th>
+                <td th:text="${post.getMember().userName}"></td>
+            </tr>
+            <tr>
+                <th scope="row">작성날짜</th>
+                <td th:text="${#strings.substring(post.createDate, 0, 16)}"></td>
+                <th scope="row">수정날짜</th>
+                <td th:text="${#strings.substring(post.updateDate, 0, 16)}"></td>
+            </tr>
+            <tr>
+                <th scope="row">제목</th>
+                <td colspan="3" th:text="${post.subject}"></td>
+            </tr>
+            </tbody>
+
+
+        </table>
+        <div id="viewer"></div>
+        <p th:text="${hashTag.getPostKeyword().keyword}"></p>
+        <a th:if="${member.userName == post.getMember().userName}" th:href="@{/post/{postId}/modify (postId = ${post.id})}">수정</a>
+        <a th:if="${member.userName == post.getMember().userName}" th:href="@{/post/{postId}/delete (postId = ${post.id})}" onclick="return confirm('게시물을 삭제하시겠습니까?');">삭제</a>
+    </div>
+    <script src="https://uicdn.toast.com/editor/2.0.0/toastui-editor-all.min.js"></script>
+    <script>
+        const viewer = toastui.Editor.factory({
+            el: document.querySelector('#viewer'),
+            initialValue: document.querySelector(".content").value,
+            viewer:true
+        });
+    </script>
+</body>
+</html>
