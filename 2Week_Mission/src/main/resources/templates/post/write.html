@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 1 _ 글 쓰기</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Create Form</h1>
+
+        <form name="form" th:action="@{/post/write}" th:object="${postDto}" method="post">
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+            </div>
+            <input type="text" name="subject" th:field="*{subject}">
+            <div id="editor"></div>
+            <input type="hidden" class="content" name="content">
+            <input type="hidden" class="contentHTML" name="contentHTML">
+            <button type="button" th:onclick="validSubmit()">등록</button>
+            <h1>Tagify 데모</h1>
+            <input class="tag" placeholder="type tags" name="keyword">
+        </form>
+
+    </div>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+    <script>
+        const Editor = toastui.Editor;
+
+        const editor = new Editor({
+            el: document.querySelector('#editor'),
+            height: '500px',
+            initialEditType: 'markdown',
+            previewStyle: 'vertical'
+        });
+
+        editor.getMarkdown();
+        editor.getHTML();
+
+        function validSubmit() {
+            document.querySelector(".content").value = editor.getMarkdown();
+            document.querySelector(".contentHTML").value = editor.getHTML();
+            document.forms["form"].submit();
+        }
+        //Tagify
+        var input = document.querySelector('.tag')
+        var tagify = new Tagify(input);
+        // 태그가 추가되면 이벤트 발생
+        tagify.on('add', function() {
+            console.log(tagify.value); // 입력된 태그 정보 객체
+        })
+    </script>
+</body>
+</html>

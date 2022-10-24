@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 1 _ 작가 등록</title>
+</head>
+<body>
+    <form th:action="@{/member/register}" method="post">
+            <div class="col-6 mb-3">
+                <label class="form-label">닉네임</label>
+                <input type="text" name="nickName" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">작가 등록</button>
+    </form>
+</body>
+</html>
