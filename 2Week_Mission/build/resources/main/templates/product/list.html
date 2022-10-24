@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 2 _ 상품 리스트</title>
+</head>
+<body>
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>작성자</th>
+                <th>작성날짜</th>
+                <th>수정날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div id="postList" th:each="product : ${productList}">
+                <tr>
+                    <td th:text="${product.id}"></td>
+                    <td>
+                        <a th:href="@{/product/{productId} (productId = ${product.id})}"
+                           th:text="${product.subject}"></a>
+                    </td>
+                    <td th:text="${product.price}"></td>
+                    <td th:text="${product.getMember().userName}"></td>
+                    <td th:text="${#strings.substring(product.createDate, 0, 16)}"></td>
+                    <td th:text="${#strings.substring(product.updateDate, 0, 16)}"></td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+        <a th:href="@{/post/write}">글 쓰기</a>
+</div>
+</body>
+</html>
