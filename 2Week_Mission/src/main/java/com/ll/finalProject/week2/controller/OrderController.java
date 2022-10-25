@@ -6,6 +6,7 @@ import com.ll.finalProject.week2.domain.CartItem;
 import com.ll.finalProject.week2.domain.Member;
 import com.ll.finalProject.week2.domain.OrderItem;
 import com.ll.finalProject.week2.domain.Ordered;
+import com.ll.finalProject.week2.exception.OrderIdNotMatchedException;
 import com.ll.finalProject.week2.service.CartItemService;
 import com.ll.finalProject.week2.service.MemberService;
 import com.ll.finalProject.week2.service.OrderItemService;
@@ -89,8 +90,21 @@ public class OrderController {
 
     @RequestMapping("/{id}/success")
     public String confirmPayment(
-            @RequestParam String paymentKey, @RequestParam String orderId, @RequestParam Long amount,
-            Model model) throws Exception {
+            @PathVariable long id,
+            @RequestParam String paymentKey,
+            @RequestParam String orderId,
+            @RequestParam Long amount,
+            Model model
+    ) throws Exception {
+
+        Ordered order = orderService.findById(id);
+
+        long orderIdInputed = Long.parseLong(orderId.split("__")[1]);
+
+        if ( id != orderIdInputed ) {
+            throw new OrderIdNotMatchedException();
+        }
+
 
         HttpHeaders headers = new HttpHeaders();
         // headers.setBasicAuth(SECRET_KEY, ""); // spring framework 5.2 이상 버전에서 지원
@@ -99,7 +113,7 @@ public class OrderController {
 
         Map<String, String> payloadMap = new HashMap<>();
         payloadMap.put("orderId", orderId);
-        payloadMap.put("amount", String.valueOf(amount));
+        payloadMap.put("amount", String.valueOf(order.getCalculatePayPrice()));
 
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
