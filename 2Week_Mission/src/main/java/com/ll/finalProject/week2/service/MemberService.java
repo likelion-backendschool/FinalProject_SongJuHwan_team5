@@ -18,6 +18,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final CashService cashService;
 
     public void create(MemberDto memberDto) {
         Member member = new Member();
@@ -97,5 +98,12 @@ public class MemberService {
 
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(null);
+    }
+
+    public void addCash(Member member, int cash, String eventType){
+        cashService.addCash(member, cash, eventType);
+        int newRestCash = member.getRestCash() + cash;
+        member.setRestCash(newRestCash);;
+        memberRepository.save(member);
     }
 }

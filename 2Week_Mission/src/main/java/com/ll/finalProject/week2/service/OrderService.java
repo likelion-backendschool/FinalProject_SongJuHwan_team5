@@ -18,6 +18,7 @@ public class OrderService {
     private final CartItemService cartItemService;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final MemberService memberService;
 
 
     public void createFromCart(Member member) {
@@ -47,5 +48,13 @@ public class OrderService {
 
     public Ordered findById(long orderId) {
         return orderRepository.findById(orderId).orElseThrow(null);
+    }
+
+    public void payByTossPayments(Ordered order) {
+        Member member = order.getMember();
+        int payPrice = order.getCalculatePayPrice();
+
+        memberService.addCash(member, payPrice, "충전_토스");
+        memberService.addCash(member, payPrice * -1 ,"결제_토스");
     }
 }
