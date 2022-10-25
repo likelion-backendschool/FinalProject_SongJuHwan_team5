@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 2 _ 주문상세페이지</title>
+</head>
+<body>
+    <div class="row">
+        <p>주문번호</p>
+        <p th:text="${order.id}"></p>
+    </div>
+    <div class="row">
+        <p>주문 날짜</p>
+        <p th:text="${order.createDate}"></p>
+    </div>
+    <div class="row">
+        <p>주문자</p>
+        <p th:text="${order.getMember().userName}"></p>
+    </div>
+    <div class="row">
+        <p>주문가격</p>
+        <p th:text="${order.calculatePayPrice}"></p>
+    </div>
+    <div>
+        <div th:each="orderItem : ${orderItemList}">
+            <p>상품</p>
+            <p th:text="${orderItem.getProduct().subject}"></p>
+            <p>가격</p>
+            <p th:text="${orderItem.getProduct.price}"></p>
+
+        </div>
+    </div>
+</body>
+</html>

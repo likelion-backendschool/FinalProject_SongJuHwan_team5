@@ -24,8 +24,13 @@ public class OrderService {
         List<CartItem> cartItemList = cartItemService.getItemsByMember(member);
         Ordered ordered = new Ordered();
         ordered.setMember(member);
+        int totalPrice = 0;
+        for(CartItem cartItem : cartItemList){
+            totalPrice += cartItem.getProduct().getPrice();
+        }
+        ordered.setCalculatePayPrice(totalPrice);
         ordered.setReadyStatus("준비");
-        ordered.setName(cartItemList.get(0).getProduct().getSubject() + "외" + (cartItemList.size()-1) + "권");
+        ordered.setName(cartItemList.get(0).getProduct().getSubject() + " 외 " + (cartItemList.size()-1) + "권");
         orderRepository.save(ordered);
         for (CartItem cartItem : cartItemList) {
             OrderItem orderItem = new OrderItem();
@@ -38,5 +43,9 @@ public class OrderService {
 
     public List<Ordered> findAllByMember(Member member) {
         return orderRepository.findAllByMember(member);
+    }
+
+    public Ordered findById(long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(null);
     }
 }

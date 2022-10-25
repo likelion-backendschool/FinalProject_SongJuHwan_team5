@@ -26,6 +26,7 @@ public class MemberService {
         member.setType("일반 회원");
         member.setEmail(memberDto.getEmail());
         member.setAuthLevel(3);
+        member.setRestCash(0);
         memberRepository.save(member);
     }
 

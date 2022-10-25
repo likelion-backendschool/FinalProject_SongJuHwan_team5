@@ -31,4 +31,7 @@ public class Member extends BaseEntity {
     @Column( name = "USER_AUTH")
     private Integer authLevel;
 
+    @Column( name = "REST_CASH")
+    private Integer restCash;
+
 }

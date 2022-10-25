@@ -18,14 +18,15 @@
         <div id="postList" th:each="order : ${orderList}">
                 <tr>
                     <td th:text="${order.id}"></td>
-                    <td th:text="${order.name}"></td>
+                    <td>
+                        <a th:href="@{/order/{orderId} (orderId = ${order.id})}"
+                           th:text="${order.name}"></a>
+                    </td>
                     <td th:text="${order.readyStatus}"></td>
                 </tr>
         </div>
         </tbody>
     </table>
 </div>
-</script>
-
 </body>
 </html>

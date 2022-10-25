@@ -26,4 +26,7 @@ public class Ordered extends BaseEntity{
     @Column(name = "ORDER_NAME")
     private String name;
 
+    @Column(name = "ORDER_TOTAL_PRICE")
+    private Integer calculatePayPrice;
+
 }
