@@ -62,4 +62,12 @@ public class OrderService {
         order.setReadyStatus("결제 완료");
         orderRepository.save(order);
     }
+
+    public void payByRestCashOnly(Long orderId) {
+        Ordered order = findById(orderId);
+        order.setIsPaid(true);
+        order.setReadyStatus("결제 완료");
+        orderRepository.save(order);
+        memberService.addCash(order.getMember(), -order.getCalculatePayPrice(), "결제_전액_예치금");
+    }
 }

@@ -40,6 +40,12 @@
     <div>
         <input type="number" id="PaymentForm__useRestCash" placeholder="사용할 예치금" class="input input-bordered min-w-[300px]" min="0" th:max="${order.getMember().restCash >= order.calculatePayPrice ? order.calculatePayPrice : order.getMember().restCash}">
     </div>
+    <div>
+        <div>
+            <span>PG결제가격 : </span>
+            <span id="PaymentForm__pgPayPriceDisplay"></span>
+        </div>
+    </div>
     <button th:if="${order.payable}" onclick="payment()" class="btn btn-sm btn-primary">카드결제</button>
     <span th:if="${order.isPaid}">결제완료</span>
 <script src="https://js.tosspayments.com/v1"></script>
@@ -57,19 +63,23 @@
     function payment() {
 
         const $PaymentForm__useRestCash = $("#PaymentForm__useRestCash");
+        const $PaymentForm__pgPayPriceDisplay = $("#PaymentForm__pgPayPriceDisplay");
         let useRestCash = parseInt($PaymentForm__useRestCash.val());
 
         if ( useRestCash == NaN ) {
             useRestCash = 0;
         }
 
-        const minUseRestCash = parseInt($PaymentForm__useRestCash.attr('min'));
         const maxUseRestCash = parseInt($PaymentForm__useRestCash.attr('max'));
 
         if ( useRestCash > maxUseRestCash ) {
             useRestCash = maxUseRestCash;
             $PaymentForm__useRestCash.val(maxUseRestCash);
         }
+
+        const pgPayPrice = orderPayPrice - useRestCash;
+
+        $PaymentForm__pgPayPriceDisplay.text(pgPayPrice);
 
         if ( orderPayPrice == useRestCash ) {
             document.payByRestCashOnlyForm.submit();

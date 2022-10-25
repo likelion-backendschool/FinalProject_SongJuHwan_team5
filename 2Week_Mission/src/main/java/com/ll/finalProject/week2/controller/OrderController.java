@@ -137,4 +137,11 @@ public class OrderController {
         model.addAttribute("code", code);
         return "order/fail";
     }
+
+    @PostMapping("/{orderId}/payByRestCashOnly")
+    @PreAuthorize("isAuthenticated()")
+    public String payByRestCashOnly(@PathVariable Long orderId){
+        orderService.payByRestCashOnly(orderId);
+        return "redirect:/order/%d".formatted(orderId);
+    }
 }
