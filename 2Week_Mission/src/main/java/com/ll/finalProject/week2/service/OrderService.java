@@ -25,6 +25,8 @@ public class OrderService {
         List<CartItem> cartItemList = cartItemService.getItemsByMember(member);
         Ordered ordered = new Ordered();
         ordered.setMember(member);
+        ordered.setIsCanceled(false);
+        ordered.setIsPaid(false);
         int totalPrice = 0;
         for(CartItem cartItem : cartItemList){
             totalPrice += cartItem.getProduct().getPrice();
@@ -56,5 +58,8 @@ public class OrderService {
 
         memberService.addCash(member, payPrice, "충전_토스");
         memberService.addCash(member, payPrice * -1 ,"결제_토스");
+        order.setIsPaid(true);
+        order.setReadyStatus("결제 완료");
+        orderRepository.save(order);
     }
 }

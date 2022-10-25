@@ -21,7 +21,10 @@ public class Ordered extends BaseEntity{
     private String readyStatus;
 
     @Column(name = "ORDER_IS_PAID")
-    private String isPaid;
+    private Boolean isPaid;
+
+    @Column(name = "ORDER_IS_CANCELED")
+    private Boolean isCanceled;
 
     @Column(name = "ORDER_NAME")
     private String name;
@@ -29,4 +32,10 @@ public class Ordered extends BaseEntity{
     @Column(name = "ORDER_TOTAL_PRICE")
     private Integer calculatePayPrice;
 
+    public boolean isPayable(){
+        if(isPaid) return false;
+        if(isCanceled) return false;
+
+        return true;
+    }
 }

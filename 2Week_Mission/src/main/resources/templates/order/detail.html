@@ -5,6 +5,9 @@
     <title>Week 2 _ 주문상세페이지</title>
 </head>
 <body>
+    <form hidden name="payByRestCashOnlyForm" method="POST" th:action="@{|/order/${order.id}/payByRestCashOnly|}">
+
+    </form>
     <div class="row">
         <p>주문번호</p>
         <p th:text="${order.id}"></p>
@@ -32,10 +35,15 @@
     </div>
 
     <div>
-        <button onclick="payment();" class="btn btn-sm btn-primary">카드결제</button>
+        보유 예치금 : [[${order.getMember().restCash}]]
     </div>
+    <div>
+        <input type="number" id="PaymentForm__useRestCash" placeholder="사용할 예치금" class="input input-bordered min-w-[300px]" min="0" th:max="${order.getMember().restCash >= order.calculatePayPrice ? order.calculatePayPrice : order.getMember().restCash}">
+    </div>
+    <button th:if="${order.payable}" onclick="payment()" class="btn btn-sm btn-primary">카드결제</button>
+    <span th:if="${order.isPaid}">결제완료</span>
 <script src="https://js.tosspayments.com/v1"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script th:inline="javascript">
     const orderId = /*[[ ${order.id} ]]*/ null;
     const buyerName = /*[[ ${order.getMember().userName} ]]*/ null;
@@ -47,10 +55,31 @@
     const tossPayments = TossPayments("test_ck_4vZnjEJeQVxOjy0QQDZ3PmOoBN0k");
 
     function payment() {
+
+        const $PaymentForm__useRestCash = $("#PaymentForm__useRestCash");
+        let useRestCash = parseInt($PaymentForm__useRestCash.val());
+
+        if ( useRestCash == NaN ) {
+            useRestCash = 0;
+        }
+
+        const minUseRestCash = parseInt($PaymentForm__useRestCash.attr('min'));
+        const maxUseRestCash = parseInt($PaymentForm__useRestCash.attr('max'));
+
+        if ( useRestCash > maxUseRestCash ) {
+            useRestCash = maxUseRestCash;
+            $PaymentForm__useRestCash.val(maxUseRestCash);
+        }
+
+        if ( orderPayPrice == useRestCash ) {
+            document.payByRestCashOnlyForm.submit();
+            return;
+        }
+
         const method = "카드"; // "카드" 혹은 "가상계좌"
 
         const paymentData = {
-            amount: orderPayPrice,
+            amount: orderPayPrice - useRestCash,
             orderId: "order__" + orderId + "__" + (Math.random() + "").substring(2),
             orderName,
             customerName: buyerName,
