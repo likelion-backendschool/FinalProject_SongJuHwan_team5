@@ -5,12 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static javax.persistence.CascadeType.ALL;
-
-
 @Entity
 @Getter
 @Setter
@@ -23,6 +17,13 @@ public class Ordered extends BaseEntity{
     @JoinColumn(name = "MEMBER_UUID")
     private Member member;
 
-//    @OneToMany(mappedBy = "order", cascade = ALL, orphanRemoval = true)
-//    private List<OrderItem> orderItems = new ArrayList<>();
+    @Column(name = "ORDER_STATUS")
+    private String readyStatus;
+
+    @Column(name = "ORDER_IS_PAID")
+    private String isPaid;
+
+    @Column(name = "ORDER_NAME")
+    private String name;
+
 }

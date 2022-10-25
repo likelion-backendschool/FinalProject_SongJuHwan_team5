@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 2 _ 주문 리스트</title>
+</head>
+<body>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>주문 명</th>
+            <th>주문 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div id="postList" th:each="order : ${orderList}">
+                <tr>
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.name}"></td>
+                    <td th:text="${order.readyStatus}"></td>
+                </tr>
+        </div>
+        </tbody>
+    </table>
+</div>
+</script>
+
+</body>
+</html>

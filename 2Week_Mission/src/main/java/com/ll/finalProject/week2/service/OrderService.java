@@ -24,6 +24,8 @@ public class OrderService {
         List<CartItem> cartItemList = cartItemService.getItemsByMember(member);
         Ordered ordered = new Ordered();
         ordered.setMember(member);
+        ordered.setReadyStatus("준비");
+        ordered.setName(cartItemList.get(0).getProduct().getSubject() + "외" + (cartItemList.size()-1) + "권");
         orderRepository.save(ordered);
         for (CartItem cartItem : cartItemList) {
             OrderItem orderItem = new OrderItem();
@@ -32,5 +34,9 @@ public class OrderService {
             orderItemRepository.save(orderItem);
             cartItemService.delete(cartItem);
         }
+    }
+
+    public List<Ordered> findAllByMember(Member member) {
+        return orderRepository.findAllByMember(member);
     }
 }
