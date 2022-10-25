@@ -52,12 +52,18 @@ public class OrderService {
         return orderRepository.findById(orderId).orElseThrow(null);
     }
 
-    public void payByTossPayments(Ordered order) {
+    public void payByTossPayments(Ordered order, int payPriceRestCash) {
         Member member = order.getMember();
         int payPrice = order.getCalculatePayPrice();
+        int pgPayPrice = payPrice - payPriceRestCash;
 
-        memberService.addCash(member, payPrice, "충전_토스");
-        memberService.addCash(member, payPrice * -1 ,"결제_토스");
+        memberService.addCash(member, pgPayPrice, "주문__%d__충전__토스".formatted(order.getId()));
+        memberService.addCash(member, pgPayPrice * -1 ,"주문__%d__사용__토스".formatted(order.getId()));
+
+        if( payPriceRestCash > 0){
+            memberService.addCash(member, payPriceRestCash * -1 , "주문__%d__사용__예치금".formatted(order.getId()));
+        }
+
         order.setIsPaid(true);
         order.setReadyStatus("결제 완료");
         orderRepository.save(order);

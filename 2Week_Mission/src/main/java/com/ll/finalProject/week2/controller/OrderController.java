@@ -7,6 +7,7 @@ import com.ll.finalProject.week2.domain.Member;
 import com.ll.finalProject.week2.domain.OrderItem;
 import com.ll.finalProject.week2.domain.Ordered;
 import com.ll.finalProject.week2.exception.OrderIdNotMatchedException;
+import com.ll.finalProject.week2.exception.OrderNotEnoughRestCashException;
 import com.ll.finalProject.week2.service.CartItemService;
 import com.ll.finalProject.week2.service.MemberService;
 import com.ll.finalProject.week2.service.OrderItemService;
@@ -93,7 +94,7 @@ public class OrderController {
             @PathVariable long id,
             @RequestParam String paymentKey,
             @RequestParam String orderId,
-            @RequestParam Long amount,
+            @RequestParam int amount,
             Model model
     ) throws Exception {
 
@@ -113,15 +114,25 @@ public class OrderController {
 
         Map<String, String> payloadMap = new HashMap<>();
         payloadMap.put("orderId", orderId);
-        payloadMap.put("amount", String.valueOf(order.getCalculatePayPrice()));
+        payloadMap.put("amount", String.valueOf(amount));
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Member member = memberService.findByUserName(user.getUsername());
+
+        int restCash = member.getRestCash(); // 사용자가 보유하고 있는 예치금
+        int payPriceRestCash = order.getCalculatePayPrice() - amount; // 사용한 예치금의 금액
+
+        if(payPriceRestCash > restCash) {// 사용한 예치금의 금액이 보유하고 있는 예치금보다 큰 경우
+            throw new OrderNotEnoughRestCashException();
+        }
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            orderService.payByTossPayments(order);
+            orderService.payByTossPayments(order, payPriceRestCash);
             return "order/success";
         } else {
             JsonNode failNode = responseEntity.getBody();
