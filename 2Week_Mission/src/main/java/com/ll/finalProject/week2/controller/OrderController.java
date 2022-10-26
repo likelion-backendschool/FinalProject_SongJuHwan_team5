@@ -15,6 +15,7 @@ import com.ll.finalProject.week2.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -72,6 +73,8 @@ public class OrderController {
         model.addAttribute("orderItemList", orderItemList);
         return "order/detail";
     }
+
+    @
 
     @PostConstruct
     private void init() {
@@ -132,6 +135,7 @@ public class OrderController {
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            orderService.waitToRefund(order);
             orderService.payByTossPayments(order, payPriceRestCash);
             return "order/success";
         } else {
@@ -154,5 +158,13 @@ public class OrderController {
     public String payByRestCashOnly(@PathVariable Long orderId){
         orderService.payByRestCashOnly(orderId);
         return "redirect:/order/%d".formatted(orderId);
+
+    }
+
+    @PostMapping("/{orderId}/cancel")
+    @PreAuthorize("isAuthenticated()")
+    public String cancelOrder(@PathVariable Long orderId){
+        orderService.cancel(orderId);
+        return "redirect:/order/list";
     }
 }

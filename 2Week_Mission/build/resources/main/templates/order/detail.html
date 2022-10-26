@@ -38,7 +38,7 @@
         보유 예치금 : [[${order.getMember().restCash}]]
     </div>
     <div>
-        <input type="number" id="PaymentForm__useRestCash" placeholder="사용할 예치금" class="input input-bordered min-w-[300px]" min="0" th:max="${order.getMember().restCash >= order.calculatePayPrice ? order.calculatePayPrice : order.getMember().restCash}">
+        <input value="0" type="number" id="PaymentForm__useRestCash" placeholder="사용할 예치금" class="input input-bordered min-w-[300px]" min="0" th:max="${order.getMember().restCash >= order.calculatePayPrice ? order.calculatePayPrice : order.getMember().restCash}">
     </div>
     <div>
         <div>
