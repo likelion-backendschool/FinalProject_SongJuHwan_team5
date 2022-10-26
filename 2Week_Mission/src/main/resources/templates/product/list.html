@@ -24,20 +24,19 @@
                     <td th:text="${product.id}"></td>
                     <td>
                         <a th:href="@{/product/{productId} (productId = ${product.id})}"
-                           th:text="${product.subject}"></a>
+                           th:text="${product.subject}" class="btn btn-success"></a>
                     </td>
                     <td th:text="${product.price}"></td>
                     <td th:text="${product.getMember().userName}"></td>
                     <td th:text="${#strings.substring(product.createDate, 0, 16)}"></td>
                     <td th:text="${#strings.substring(product.updateDate, 0, 16)}"></td>
                     <td>
-                        <a th:href="@{/cart/add/{productId} (productId = ${product.id})}">장바구니에 담기</a>
+                        <a th:href="@{/cart/add/{productId} (productId = ${product.id})}" class="btn btn-success">장바구니에 담기</a>
                     </td>
                 </tr>
             </div>
             </tbody>
         </table>
-        <a th:href="@{/post/write}">글 쓰기</a>
 </div>
 </main>
 </body>

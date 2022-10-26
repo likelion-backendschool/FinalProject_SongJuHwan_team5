@@ -21,10 +21,10 @@
         <p>주문자</p>
         <p th:text="${order.getMember().userName}"></p>
     </div>
-    <div class="row">
-        <p>주문가격</p>
-        <p th:text="${order.calculatePayPrice}"></p>
-    </div>
+
+        <h1>상품 가격</h1>
+        <p class="bg-danger" th:text="${order.calculatePayPrice}"></p>
+
     <div>
         <div th:each="orderItem : ${orderItemList}">
             <p>상품</p>
@@ -47,7 +47,7 @@
             <span id="PaymentForm__pgPayPriceDisplay"></span>
         </div>
     </div>
-    <button th:if="${order.payable}" onclick="payment()" class="btn btn-sm btn-primary">결제</button>
+    <button th:if="${order.payable}" onclick="payment()" class="btn btn-primary">결제</button>
     <span th:if="${order.isPaid}">결제완료</span>
 <script src="https://js.tosspayments.com/v1"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>

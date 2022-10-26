@@ -9,7 +9,7 @@
 <main layout:fragment="main">
     <div class="container">
         <h2>게시글 상세 화면</h2>
-        <input type="hidden" class="content" th:value="${post.content}">
+        <input type="hidden" class="content" th:value="${post.content}" >
         <table class="table">
             <tbody>
             <tr>
@@ -34,8 +34,8 @@
         </table>
         <div id="viewer"></div>
         <p th:text="${hashTag.getPostKeyword().keyword}"></p>
-        <a th:if="${member.userName == post.getMember().userName}" th:href="@{/post/{postId}/modify (postId = ${post.id})}">수정</a>
-        <a th:if="${member.userName == post.getMember().userName}" th:href="@{/post/{postId}/delete (postId = ${post.id})}" onclick="return confirm('게시물을 삭제하시겠습니까?');">삭제</a>
+        <a th:if="${member.userName == post.getMember().userName}" th:href="@{/post/{postId}/modify (postId = ${post.id})}" class="input input-bordered">수정</a>
+        <a th:if="${member.userName == post.getMember().userName}" th:href="@{/post/{postId}/delete (postId = ${post.id})}" onclick="return confirm('게시물을 삭제하시겠습니까?');" class="input input-bordered">삭제</a>
     </div>
     <script src="https://uicdn.toast.com/editor/2.0.0/toastui-editor-all.min.js"></script>
     <script>

@@ -23,14 +23,14 @@
                 <td th:text="${order.id}"></td>
                 <td>
                     <a th:href="@{/order/{orderId} (orderId = ${order.id})}"
-                       th:text="${order.name}"></a>
+                       th:text="${order.name}" class="btn btn-success"></a>
                 </td>
                 <td th:text="${order.readyStatus}"></td>
                 <td th:if="${order.readyStatus == '준비'}">
-                    <button type="submit" th:form="cancelOrderForm + ${order.id}">주문 취소</button>
+                    <button type="submit" th:form="cancelOrderForm + ${order.id}" class="btn btn-success">주문 취소</button>
                 </td>
                 <td th:if="${order.readyStatus == '결제완료' && !order.isRefunded}">
-                    <button type="submit" th:form="refundOrderForm + ${order.id}">주문 환불</button>
+                    <button type="submit" th:form="refundOrderForm + ${order.id}" class="btn btn-success">주문 환불</button>
                 </td>
             </tr>
         </div>

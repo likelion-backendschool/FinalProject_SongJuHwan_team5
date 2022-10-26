@@ -15,7 +15,7 @@
             <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
                 <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
             </div>
-            <input type="text" name="subject" th:field="*{subject}">
+            <input type="text" name="subject" th:field="*{subject}" class="input input-bordered">
             <div id="editor"></div>
             <input type="hidden" class="content" name="content">
             <input type="hidden" class="contentHTML" name="contentHTML">

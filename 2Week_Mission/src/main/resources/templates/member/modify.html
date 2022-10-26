@@ -13,14 +13,14 @@
             <div class="row">
                 <div class="col-6 mb-3" th:if="${member.type == '작가 회원'}">
                     <label class="form-label">사용자 닉네임</label>
-                    <input type="text" name="nickName" th:field="*{nickName}" class="form-control">
+                    <input type="text" name="nickName" th:field="*{nickName}" class="input input-bordered">
                 </div>
                 <div class="col-6 mb-3">
                     <label class="form-label">이메일</label>
-                    <input type="email" name="email" th:field="*{email}" class="form-control">
+                    <input type="email" name="email" th:field="*{email}" class="input input-bordered">
                 </div>
                 <button type="submit" class="btn btn-primary">회원 정보 수정</button>
-                <a sec:authorize="isAuthenticated()" th:href="@{/member/modifyPassword}">비밀번호 변경</a>
+                <a sec:authorize="isAuthenticated()" th:href="@{/member/modifyPassword}" class="btn btn-success">비밀번호 변경</a>
             </div>
         </form>
     </main>

@@ -15,15 +15,15 @@
   <div class="row">
     <div class="col-12 mb-3">
       <label for="username" class="form-label">사용자ID</label>
-      <input type="text" name="username" id="username" class="form-control">
+      <input type="text" name="username" id="username" class="input input-bordered">
     </div>
     <div class="col-12 mb-3">
       <label for="password" class="form-label">비밀번호</label>
-      <input type="password" name="password" id="password" class="form-control">
+      <input type="password" name="password" id="password" class="input input-bordered">
     </div>
     <button type="submit" class="btn btn-primary">로그인</button>
-    <a sec:authorize="isAnonymous()" th:href="@{/member/findUsername}">아이디찾기</a>
-    <a sec:authorize="isAnonymous()" th:href="@{/member/findPassword}">비밀번호 찾기</a>
+    <a sec:authorize="isAnonymous()" th:href="@{/member/findUsername}" class="btn btn-success">아이디찾기</a>
+    <a sec:authorize="isAnonymous()" th:href="@{/member/findPassword}" class="btn btn-success">비밀번호 찾기</a>
 
   </div>
 </form>

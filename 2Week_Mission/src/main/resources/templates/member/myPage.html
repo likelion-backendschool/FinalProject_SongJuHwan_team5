@@ -23,10 +23,10 @@
         <p th:text="${member.nickName}"></p>
     </div>
     <div>
-        <a sec:authorize="isAuthenticated()" th:href="@{/member/modify}">회원정보 수정</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/member/modify}" class="btn btn-success">회원정보 수정</a>
     </div>
     <div th:if="${member.type == '일반 회원'}">
-        <a th:href="@{/member/register}">작가 등록</a>
+        <a th:href="@{/member/register}" class="btn btn-success">작가 등록</a>
     </div>
 </main>
 </body>
