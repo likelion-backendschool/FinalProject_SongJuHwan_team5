@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 1 _ 글 리스트</title>
+</head>
+<body>
+<main layout:fragment="main">
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>해시태그</th>
+                <th>작성자</th>
+                <th>작성날짜</th>
+                <th>수정날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+                <div id="postList" th:each="hashTag : ${hashTagList}">
+                    <tr>
+                        <td th:text="${hashTag.getPost().id}"></td>
+                        <td>
+                            <a th:href="@{/post/{postId} (postId = ${hashTag.getPost().id})}"
+                               th:text="${hashTag.getPost().subject}" class="input input-bordered"></a>
+                        </td>
+                        <td th:text="${hashTag.getPostKeyword().keyword}"></td>
+                        <td th:text="${hashTag.getPost().getMember().userName}"></td>
+                        <td th:text="${#strings.substring(hashTag.createDate, 0, 16)}"></td>
+                        <td th:text="${#strings.substring(hashTag.updateDate, 0, 16)}"></td>
+                    </tr>
+                </div>
+            </tbody>
+        </table>
+        <a th:href="@{/post/write}" class="input input-bordered">글 쓰기</a>
+    </div>
+</main>
+</body>
+</html>

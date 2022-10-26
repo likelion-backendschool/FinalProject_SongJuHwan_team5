@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 2 _ 주문 리스트</title>
+</head>
+<body>
+<main layout:fragment="main">
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>주문 명</th>
+            <th>주문 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div id="postList" th:each="order : ${orderList}">
+            <form hidden th:id="cancelOrderForm + ${order.id}" method="POST" th:action="@{/order/{orderId}/cancel (orderId = ${order.id})}"></form>
+            <form hidden th:id="refundOrderForm + ${order.id}" method="POST" th:action="@{/order/{orderId}/refund (orderId = ${order.id})}"></form>
+            <tr>
+                <td th:text="${order.id}"></td>
+                <td>
+                    <a th:href="@{/order/{orderId} (orderId = ${order.id})}"
+                       th:text="${order.name}" class="btn btn-success"></a>
+                </td>
+                <td th:text="${order.readyStatus}"></td>
+                <td th:if="${order.readyStatus == '준비'}">
+                    <button type="submit" th:form="cancelOrderForm + ${order.id}" class="btn btn-success">주문 취소</button>
+                </td>
+                <td th:if="${order.readyStatus == '결제완료' && !order.isRefunded}">
+                    <button type="submit" th:form="refundOrderForm + ${order.id}" class="btn btn-success">주문 환불</button>
+                </td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+    function cancelOrder() {
+        document.cancelOrderForm.submit();
+    }
+
+    function refundOrder() {
+        document.refundOrderForm.submit();
+    }
+</script>
+</main>
+</body>
+</html>

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{/layout/layout}">
 <head>
     <meta charset="UTF-8">
     <title>Week 1 _ 프로필</title>
 </head>
 <body>
+<main layout:fragment="main">
     <div class="row">
         <p>ID</p>
         <p th:text="${member.userName}"></p>
@@ -22,12 +23,11 @@
         <p th:text="${member.nickName}"></p>
     </div>
     <div>
-        <a sec:authorize="isAuthenticated()" th:href="@{/member/modify}">회원정보 수정</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/member/modify}" class="btn btn-success">회원정보 수정</a>
     </div>
     <div th:if="${member.type == '일반 회원'}">
-        <a th:href="@{/member/register}">작가 등록</a>
+        <a th:href="@{/member/register}" class="btn btn-success">작가 등록</a>
     </div>
-
-
+</main>
 </body>
 </html>

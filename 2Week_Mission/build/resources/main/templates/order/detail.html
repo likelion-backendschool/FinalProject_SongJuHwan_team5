@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 2 _ 주문상세페이지</title>
+</head>
+<body>
+<main layout:fragment="main">
+    <form hidden name="payByRestCashOnlyForm" method="POST" th:action="@{|/order/${order.id}/payByRestCashOnly|}">
+
+    </form>
+    <div class="row">
+        <p>주문번호</p>
+        <p th:text="${order.id}"></p>
+    </div>
+    <div class="row">
+        <p>주문 날짜</p>
+        <p th:text="${order.createDate}"></p>
+    </div>
+    <div class="row">
+        <p>주문자</p>
+        <p th:text="${order.getMember().userName}"></p>
+    </div>
+
+        <h1>상품 가격</h1>
+        <p class="bg-danger" th:text="${order.calculatePayPrice}"></p>
+
+    <div>
+        <div th:each="orderItem : ${orderItemList}">
+            <p>상품</p>
+            <p th:text="${orderItem.getProduct().subject}"></p>
+            <p>가격</p>
+            <p th:text="${orderItem.getProduct.price}"></p>
+
+        </div>
+    </div>
+
+    <div>
+        보유 예치금 : [[${order.getMember().restCash}]]
+    </div>
+    <div>
+        <input value="0" type="number" id="PaymentForm__useRestCash" placeholder="사용할 예치금" class="input input-bordered min-w-[300px]" min="0" th:max="${order.getMember().restCash >= order.calculatePayPrice ? order.calculatePayPrice : order.getMember().restCash}">
+    </div>
+    <div>
+        <div>
+            <span>PG결제가격 : </span>
+            <span id="PaymentForm__pgPayPriceDisplay"></span>
+        </div>
+    </div>
+    <button th:if="${order.payable}" onclick="payment()" class="btn btn-primary">결제</button>
+    <span th:if="${order.isPaid}">결제완료</span>
+<script src="https://js.tosspayments.com/v1"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    const orderId = /*[[ ${order.id} ]]*/ null;
+    const buyerName = /*[[ ${order.getMember().userName} ]]*/ null;
+    const orderName = /*[[ ${order.name} ]]*/ null;
+    const orderPayPrice = /*[[ ${order.calculatePayPrice} ]]*/ null;
+</script>
+
+<script>
+    const tossPayments = TossPayments("test_ck_4vZnjEJeQVxOjy0QQDZ3PmOoBN0k");
+
+    function payment() {
+
+        const $PaymentForm__useRestCash = $("#PaymentForm__useRestCash");
+        const $PaymentForm__pgPayPriceDisplay = $("#PaymentForm__pgPayPriceDisplay");
+        let useRestCash = parseInt($PaymentForm__useRestCash.val());
+
+        if ( useRestCash == NaN ) {
+            useRestCash = 0;
+        }
+
+        const maxUseRestCash = parseInt($PaymentForm__useRestCash.attr('max'));
+
+        if ( useRestCash > maxUseRestCash ) {
+            useRestCash = maxUseRestCash;
+            $PaymentForm__useRestCash.val(maxUseRestCash);
+        }
+
+        const pgPayPrice = orderPayPrice - useRestCash;
+
+        $PaymentForm__pgPayPriceDisplay.text(pgPayPrice);
+
+        if ( orderPayPrice == useRestCash ) {
+            document.payByRestCashOnlyForm.submit();
+            return;
+        }
+
+        const method = "카드"; // "카드" 혹은 "가상계좌"
+
+        const paymentData = {
+            amount: orderPayPrice - useRestCash,
+            orderId: "order__" + orderId + "__" + (Math.random() + "").substring(2),
+            orderName,
+            customerName: buyerName,
+            successUrl: window.location.origin + "/order/" + orderId + "/success",
+            failUrl: window.location.origin + "/order/" + orderId + "/fail"
+        };
+
+        tossPayments.requestPayment(method, paymentData);
+    }
+</script>
+
+</main>
+</body>
+</html>

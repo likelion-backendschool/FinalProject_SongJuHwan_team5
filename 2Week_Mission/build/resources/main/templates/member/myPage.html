@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 1 _ 프로필</title>
+</head>
+<body>
+<main layout:fragment="main">
+    <div class="row">
+        <p>ID</p>
+        <p th:text="${member.userName}"></p>
+    </div>
+    <div class="row">
+        <p>Email</p>
+        <p th:text="${member.email}"></p>
+    </div>
+    <div class="row">
+        <p>타입</p>
+        <p th:text="${member.type}"></p>
+    </div>
+    <div class="row" th:if="${member.type == '작가 회원'}">
+        <p>닉네임</p>
+        <p th:text="${member.nickName}"></p>
+    </div>
+    <div>
+        <a sec:authorize="isAuthenticated()" th:href="@{/member/modify}" class="btn btn-success">회원정보 수정</a>
+    </div>
+    <div th:if="${member.type == '일반 회원'}">
+        <a th:href="@{/member/register}" class="btn btn-success">작가 등록</a>
+    </div>
+</main>
+</body>
+</html>
