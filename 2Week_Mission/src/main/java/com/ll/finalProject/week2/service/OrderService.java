@@ -29,6 +29,7 @@ public class OrderService {
         ordered.setMember(member);
         ordered.setIsCanceled(false);
         ordered.setIsPaid(false);
+        ordered.setIsRefunded(false);
         int totalPrice = 0;
         for(CartItem cartItem : cartItemList){
             totalPrice += cartItem.getProduct().getPrice();
@@ -73,6 +74,15 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    @Async
+    public void waitToRefund(Ordered order) throws InterruptedException {
+        System.out.println("10분 후 환불 불가");
+        Thread.sleep(1000 * 60 * 60);
+        order.setReadyStatus("결제 확정");
+        System.out.println("이제 환불 불가");
+
+    }
+
     public void payByRestCashOnly(Long orderId) {
         Ordered order = findById(orderId);
         order.setIsPaid(true);
@@ -86,5 +96,13 @@ public class OrderService {
         order.setIsCanceled(true);
         order.setReadyStatus("주문 취소");
         orderRepository.save(order);
+    }
+
+    public void refund(Long orderId) {
+        Ordered order = findById(orderId);
+        order.setIsRefunded(true);
+        order.setReadyStatus("주문 환불");
+        orderRepository.save(order);
+        memberService.addCash(order.getMember(), order.getCalculatePayPrice(), "환불__전액__예치금");
     }
 }

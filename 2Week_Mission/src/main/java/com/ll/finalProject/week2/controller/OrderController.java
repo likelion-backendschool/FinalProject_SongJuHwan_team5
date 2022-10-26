@@ -74,8 +74,6 @@ public class OrderController {
         return "order/detail";
     }
 
-    @
-
     @PostConstruct
     private void init() {
         restTemplate.setErrorHandler(new ResponseErrorHandler() {
@@ -167,4 +165,12 @@ public class OrderController {
         orderService.cancel(orderId);
         return "redirect:/order/list";
     }
+
+    @PostMapping("/{orderId}/refund")
+    @PreAuthorize("isAuthenticated()")
+    public String refundOrder(@PathVariable Long orderId){
+        orderService.refund(orderId);
+        return "redirect:/order/list";
+    }
+
 }

@@ -26,6 +26,9 @@ public class Ordered extends BaseEntity{
     @Column(name = "ORDER_IS_CANCELED")
     private Boolean isCanceled;
 
+    @Column(name = "ORDER_IS_REFUNDED")
+    private Boolean isRefunded;
+
     @Column(name = "ORDER_NAME")
     private String name;
 
@@ -33,8 +36,9 @@ public class Ordered extends BaseEntity{
     private Integer calculatePayPrice;
 
     public boolean isPayable(){
-        if(isPaid) return false;
-        if(isCanceled) return false;
+        if(isPaid) return false; //결제했으면 결제 X
+        if(isCanceled) return false; //취소했으면 결제 X
+        if(isRefunded) return false; //환불했으면 결제 X
 
         return true;
     }
