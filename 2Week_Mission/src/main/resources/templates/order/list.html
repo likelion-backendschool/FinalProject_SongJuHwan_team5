@@ -16,17 +16,35 @@
         </thead>
         <tbody>
         <div id="postList" th:each="order : ${orderList}">
-                <tr>
-                    <td th:text="${order.id}"></td>
-                    <td>
-                        <a th:href="@{/order/{orderId} (orderId = ${order.id})}"
-                           th:text="${order.name}"></a>
-                    </td>
-                    <td th:text="${order.readyStatus}"></td>
-                </tr>
+            <form hidden th:id="cancelOrderForm + ${order.id}" method="POST" th:action="@{/order/{orderId}/cancel (orderId = ${order.id})}"></form>
+            <form hidden th:id="refundOrderForm + ${order.id}" method="POST" th:action="@{/order/{orderId}/refund (orderId = ${order.id})}"></form>
+            <tr>
+                <td th:text="${order.id}"></td>
+                <td>
+                    <a th:href="@{/order/{orderId} (orderId = ${order.id})}"
+                       th:text="${order.name}"></a>
+                </td>
+                <td th:text="${order.readyStatus}"></td>
+                <td th:if="${order.readyStatus == '준비'}">
+                    <button type="submit" th:form="cancelOrderForm + ${order.id}">주문 취소</button>
+                </td>
+                <td th:if="${order.readyStatus == '결제완료' && !order.isRefunded}">
+                    <button type="submit" th:form="refundOrderForm + ${order.id}">주문 취소</button>
+                </td>
+            </tr>
         </div>
         </tbody>
     </table>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+    function cancelOrder() {
+        document.cancelOrderForm.submit();
+    }
+
+    function refundOrder() {
+        document.refundOrderForm.submit();
+    }
+</script>
 </body>
 </html>

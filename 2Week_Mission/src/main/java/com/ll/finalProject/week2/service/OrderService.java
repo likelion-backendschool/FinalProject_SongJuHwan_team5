@@ -1,13 +1,11 @@
 package com.ll.finalProject.week2.service;
 
-import com.ll.finalProject.week2.domain.CartItem;
-import com.ll.finalProject.week2.domain.Member;
-import com.ll.finalProject.week2.domain.Ordered;
-import com.ll.finalProject.week2.domain.OrderItem;
+import com.ll.finalProject.week2.domain.*;
 import com.ll.finalProject.week2.repository.OrderItemRepository;
 import com.ll.finalProject.week2.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.criterion.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +19,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final MemberService memberService;
+    private final MyBookService myBookService;
 
 
     public void createFromCart(Member member) {
@@ -58,6 +57,7 @@ public class OrderService {
     public void payByTossPayments(Ordered order, int payPriceRestCash) {
 
         Member member = order.getMember();
+
         int payPrice = order.getCalculatePayPrice();
         int pgPayPrice = payPrice - payPriceRestCash;
 
@@ -70,23 +70,31 @@ public class OrderService {
         }
 
         order.setIsPaid(true);
-        order.setReadyStatus("결제 완료");
+        order.setReadyStatus("결제완료");
+
+        List<OrderItem> orderItemList = orderItemRepository.findAllByOrdered(order);
+
+        for(OrderItem orderItem : orderItemList){
+            MyBook myBook = new MyBook();
+            myBook.setProduct(orderItem.getProduct());
+            myBook.setMember(orderItem.getOrdered().getMember());
+            myBookService.addBook(myBook);
+        }
+
         orderRepository.save(order);
     }
 
     @Async
     public void waitToRefund(Ordered order) throws InterruptedException {
-        System.out.println("10분 후 환불 불가");
         Thread.sleep(1000 * 60 * 60);
-        order.setReadyStatus("결제 확정");
-        System.out.println("이제 환불 불가");
-
+        order.setReadyStatus("결제확정");
+        orderRepository.save(order);
     }
 
     public void payByRestCashOnly(Long orderId) {
         Ordered order = findById(orderId);
         order.setIsPaid(true);
-        order.setReadyStatus("결제 완료");
+        order.setReadyStatus("결제완료");
         orderRepository.save(order);
         memberService.addCash(order.getMember(), -order.getCalculatePayPrice(), "결제_전액_예치금");
     }
@@ -94,14 +102,14 @@ public class OrderService {
     public void cancel(Long orderId) {
         Ordered order = findById(orderId);
         order.setIsCanceled(true);
-        order.setReadyStatus("주문 취소");
+        order.setReadyStatus("주문취소");
         orderRepository.save(order);
     }
 
     public void refund(Long orderId) {
         Ordered order = findById(orderId);
         order.setIsRefunded(true);
-        order.setReadyStatus("주문 환불");
+        order.setReadyStatus("주문환불");
         orderRepository.save(order);
         memberService.addCash(order.getMember(), order.getCalculatePayPrice(), "환불__전액__예치금");
     }

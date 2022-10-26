@@ -43,7 +43,7 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String createOrder(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

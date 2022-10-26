@@ -29,7 +29,8 @@
                 </tr>
             </div>
         </div>
-        <a th:href="@{/order/create}">장바구니에 담긴 항목 주문하기</a>
+        <form hidden id="createOrderListForm" method="POST" th:action="@{/order/create}"></form>
+        <button type="submit" form="createOrderListForm">주문하기</button>
         </tbody>
     </table>
 </div>
