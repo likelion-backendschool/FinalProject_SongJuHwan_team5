@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{/layout/layout}">
 <head>
     <meta charset="UTF-8">
     <title>Week 1 _ 프로필</title>
 </head>
 <body>
+<main layout:fragment="main">
     <div class="row">
         <p>ID</p>
         <p th:text="${member.userName}"></p>
@@ -27,8 +28,6 @@
     <div th:if="${member.type == '일반 회원'}">
         <a th:href="@{/member/register}">작가 등록</a>
     </div>
-
-
-
+</main>
 </body>
 </html>

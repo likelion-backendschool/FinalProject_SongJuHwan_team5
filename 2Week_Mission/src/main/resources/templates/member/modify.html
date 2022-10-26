@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{/layout/layout}">
 <head>
     <meta charset="UTF-8">
     <title>Week 1 _ 회원정보수정</title>
 </head>
     <body>
-        <form th:action="@{/member/modify}" th:object="${memberModifyDto}" method="post">
+    <main layout:fragment="main">
+    <form th:action="@{/member/modify}" th:object="${memberModifyDto}" method="post">
             <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
                 <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
             </div>
@@ -22,5 +23,6 @@
                 <a sec:authorize="isAuthenticated()" th:href="@{/member/modifyPassword}">비밀번호 변경</a>
             </div>
         </form>
+    </main>
     </body>
 </html>

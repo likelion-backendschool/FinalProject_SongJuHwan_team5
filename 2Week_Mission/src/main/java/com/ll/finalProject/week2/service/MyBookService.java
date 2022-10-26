@@ -16,7 +16,7 @@ public class MyBookService {
         myBookRepository.save(myBook);
     }
 
-    public MyBook findByMemberAndProduct(Product product, Member member) {
+    public MyBook findByMemberAndProduct(Member member, Product product) {
         return myBookRepository.findByMemberAndProduct(member, product);
     }
 

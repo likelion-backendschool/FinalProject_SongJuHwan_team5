@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html layout:decorate="~{/layout/layout}">
 <head>
     <meta charset="UTF-8">
     <title>Week 1 _ 글 쓰기</title>
@@ -7,6 +7,7 @@
     <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+<main layout:fragment="main">
     <div class="container">
         <h1>Create Form</h1>
 
@@ -52,5 +53,6 @@
             console.log(tagify.value); // 입력된 태그 정보 객체
         })
     </script>
+</main>
 </body>
 </html>

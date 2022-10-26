@@ -61,12 +61,12 @@ public class OrderService {
         int payPrice = order.getCalculatePayPrice();
         int pgPayPrice = payPrice - payPriceRestCash;
 
-        memberService.addCash(member, pgPayPrice, "주문__%d__충전__토스".formatted(order.getId()));
-        memberService.addCash(member, pgPayPrice * -1 ,"주문__%d__사용__토스".formatted(order.getId()));
+        memberService.addCash(member, pgPayPrice, "주문_%d_충전_토스".formatted(order.getId()));
+        memberService.addCash(member, pgPayPrice * -1 ,"주문_%d_사용_토스".formatted(order.getId()));
 
 
         if( payPriceRestCash > 0){
-            memberService.addCash(member, payPriceRestCash * -1 , "주문__%d__사용__예치금".formatted(order.getId()));
+            memberService.addCash(member, payPriceRestCash * -1 , "주문_%d_사용_예치금".formatted(order.getId()));
         }
 
         order.setIsPaid(true);
@@ -105,7 +105,7 @@ public class OrderService {
         order.setIsPaid(true);
         order.setReadyStatus("결제완료");
         orderRepository.save(order);
-        memberService.addCash(order.getMember(), -order.getCalculatePayPrice(), "결제_전액_예치금");
+        memberService.addCash(order.getMember(), -order.getCalculatePayPrice(), "주문_%d_사용_예치금".formatted(order.getId()));
     }
 
     public void cancel(Long orderId) {
@@ -119,12 +119,12 @@ public class OrderService {
         Ordered order = findById(orderId);
         List<OrderItem> orderItemList = orderItemRepository.findAllByOrdered(order);
         for(OrderItem orderItem : orderItemList){
-            MyBook myBook = myBookService.findByMemberAndProduct(orderItem.getProduct(), orderItem.getOrdered().getMember());
+            MyBook myBook = myBookService.findByMemberAndProduct(orderItem.getOrdered().getMember(), orderItem.getProduct());
             myBookService.remove(myBook);
         }
         order.setIsRefunded(true);
         order.setReadyStatus("주문환불");
         orderRepository.save(order);
-        memberService.addCash(order.getMember(), order.getCalculatePayPrice(), "환불__전액__예치금");
+        memberService.addCash(order.getMember(), order.getCalculatePayPrice(), "주문_%d_환불_예치금".formatted(order.getId()));
     }
 }

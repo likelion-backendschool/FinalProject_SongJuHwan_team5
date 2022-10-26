@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html layout:decorate="~{/layout/layout}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 </head>
 <body>
+<main layout:fragment="main">
     <div class="container">
         <h2>게시글 상세 화면</h2>
         <input type="hidden" class="content" th:value="${post.content}">
@@ -44,5 +45,6 @@
             viewer:true
         });
     </script>
+</main>
 </body>
 </html>
