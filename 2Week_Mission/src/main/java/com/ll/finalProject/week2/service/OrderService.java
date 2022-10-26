@@ -93,6 +93,15 @@ public class OrderService {
 
     public void payByRestCashOnly(Long orderId) {
         Ordered order = findById(orderId);
+        List<OrderItem> orderItemList = orderItemRepository.findAllByOrdered(order);
+
+        for(OrderItem orderItem : orderItemList){
+            MyBook myBook = new MyBook();
+            myBook.setProduct(orderItem.getProduct());
+            myBook.setMember(orderItem.getOrdered().getMember());
+            myBookService.addBook(myBook);
+        }
+
         order.setIsPaid(true);
         order.setReadyStatus("결제완료");
         orderRepository.save(order);
@@ -108,6 +117,11 @@ public class OrderService {
 
     public void refund(Long orderId) {
         Ordered order = findById(orderId);
+        List<OrderItem> orderItemList = orderItemRepository.findAllByOrdered(order);
+        for(OrderItem orderItem : orderItemList){
+            MyBook myBook = myBookService.findByMemberAndProduct(orderItem.getProduct(), orderItem.getOrdered().getMember());
+            myBookService.remove(myBook);
+        }
         order.setIsRefunded(true);
         order.setReadyStatus("주문환불");
         orderRepository.save(order);
