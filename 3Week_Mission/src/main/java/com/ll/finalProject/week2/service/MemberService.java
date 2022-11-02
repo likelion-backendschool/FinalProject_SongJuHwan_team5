@@ -56,7 +56,7 @@ public class MemberService {
         List<Member> memberList = memberRepository.findAll();
         for(Member member : memberList){
             if(member.getEmail().equals(email)){
-                return member.getUserName();
+                return member.getUsername();
             }
         }
         String wrong = "해당 e-mail로 등록된 ID가 존재하지 않습니다.";
@@ -71,7 +71,7 @@ public class MemberService {
     public String findPassword(String userName, String email) {
         List<Member> memberList = memberRepository.findAll();
         for(Member member : memberList) {
-            if(member.getUserName().equals(userName) && member.getEmail().equals(email)){
+            if(member.getPassword().equals(userName) && member.getEmail().equals(email)){
                 //랜덤 문자열 생성
                 String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
                 int alphaNumLength = alphaNum.length();

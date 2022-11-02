@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -31,10 +32,8 @@ public class CartItemController {
 
     @GetMapping("/list")
     @PreAuthorize("isAuthenticated()")
-    public String cartItemList(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        Member member = memberService.findByUserName(user.getUsername());
+    public String cartItemList(Model model, Principal principal){
+        Member member = memberService.findByUserName(principal.getName());
         List<CartItem> cartItemList = cartItemService.findAll();
         model.addAttribute("member", member);
         model.addAttribute("cartItemList", cartItemList);
@@ -43,10 +42,8 @@ public class CartItemController {
 
     @GetMapping("/add/{productId}")
     @PreAuthorize("isAuthenticated()")
-    public String addCartList(@PathVariable Long productId, Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        Member member = memberService.findByUserName(user.getUsername());
+    public String addCartList(@PathVariable Long productId, Model model, Principal principal){
+        Member member = memberService.findByUserName(principal.getName());
         Product product = productService.findById(productId);
         try{
             cartItemService.addItem(member, product);
@@ -59,10 +56,8 @@ public class CartItemController {
 
     @GetMapping("/remove/{productId}")
     @PreAuthorize("isAuthenticated()")
-    public String removeCartList(@PathVariable Long productId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        Member member = memberService.findByUserName(user.getUsername());
+    public String removeCartList(@PathVariable Long productId, Principal principal){
+        Member member = memberService.findByUserName(principal.getName());
         Product product = productService.findById(productId);
         cartItemService.delete(member, product);
         return "redirect:/cart/list";

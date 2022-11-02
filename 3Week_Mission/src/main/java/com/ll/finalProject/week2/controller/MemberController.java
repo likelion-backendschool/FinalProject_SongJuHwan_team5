@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 
 @Controller
@@ -73,10 +74,8 @@ public class MemberController {
 
     @GetMapping("/myPage")
     @PreAuthorize("isAuthenticated()")
-    public String myPage(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        Member member = memberService.findByUserName(user.getUsername());
+    public String myPage(Model model, Principal principal){
+        Member member = memberService.findByUserName(principal.getName());
         model.addAttribute("member" , member);
         return "/member/myPage";
     }

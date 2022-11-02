@@ -42,6 +42,18 @@
         </a>
 
         <div class="flex gap-4">
+            <a href="/adm/rebate/makeData" class="inline-flex" sec:authorize="hasRole('ADMIN')">
+                <i class="fa-solid fa-calculator"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    정산 페이지
+                </span>
+            </a>
+            <a href="/adm/home/main" class="inline-flex" sec:authorize="hasRole('ADMIN')">
+                <i class="fa-solid fa-eye"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    관리자 페이지
+                </span>
+            </a>
             <a href="/member/login" class="inline-flex" sec:authorize="isAnonymous()">
                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
                 <span class="ml-[2px] hidden sm:block">
