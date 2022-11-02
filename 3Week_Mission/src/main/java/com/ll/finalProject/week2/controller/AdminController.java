@@ -18,4 +18,10 @@ public class AdminController {
         return "admin/main";
     }
 
+    @GetMapping("/rebate/makeData")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    public String rebate(){
+        return "admin/makeRebateData";
+    }
+
 }
